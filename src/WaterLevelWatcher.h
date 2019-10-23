@@ -8,8 +8,8 @@
 #ifndef WATER_LEVEL_WATCHER_H
 #define WATER_LEVEL_WATCHER_H
 
-#include <EEPROM.h>
 #include <ArduinoJson.h>
+#include <EEPROM.h>
 #include "Common.h"
 #ifdef ESP8266
 #include <ESP8266HTTPClient.h>
@@ -23,7 +23,7 @@
 
 #define JSON_LEN 256
 
-//DEBUG
+// DEBUG
 #ifndef WATER_LEVEL_WATCHER_DEBUG_PORT
 #define WATER_LEVEL_WATCHER_DEBUG_PORT Serial
 #endif
@@ -44,8 +44,7 @@
  * @date 2019-08-27
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
-struct WATER_LEVEL_WATCHER_DATA
-{
+struct WATER_LEVEL_WATCHER_DATA {
   /** 데이터 저장유뮤 */
   bool is_saved;
   /** 수위 체크 사용 유무 */
@@ -63,15 +62,14 @@ struct WATER_LEVEL_WATCHER_DATA
  * @date 2019-08-27
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
-class WaterLevelWatcher
-{
-private:
+class WaterLevelWatcher {
+ private:
   WATER_LEVEL_WATCHER_DATA _water_level_watcher_data;
   WaterLevelState _state;
   bool _water_level_change_flag = false;
   int _eeprom_address = 0;
 
-public:
+ public:
   WaterLevelWatcher(void);
   void watch(void);
   bool isWaterLevelChanged(void);

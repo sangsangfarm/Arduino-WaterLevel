@@ -7,9 +7,7 @@
  * @date 2019-10-10
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
-WaterLevel::WaterLevel()
-{
-}
+WaterLevel::WaterLevel() {}
 
 /**
  * @fn WaterLevel::WaterLevel()
@@ -19,10 +17,7 @@ WaterLevel::WaterLevel()
  * @date 2019-10-10
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
-WaterLevel::WaterLevel(int pins[], size_t length)
-{
-  setPins(pins, length);
-}
+WaterLevel::WaterLevel(int pins[], size_t length) { setPins(pins, length); }
 
 /**
  * @fn WaterLevel::~WaterLevel()
@@ -30,10 +25,8 @@ WaterLevel::WaterLevel(int pins[], size_t length)
  * @date 2019-10-10
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
-WaterLevel::~WaterLevel()
-{
-  if (_pins != NULL)
-  {
+WaterLevel::~WaterLevel() {
+  if (_pins != NULL) {
     free(_pins);
     _pins = NULL;
   }
@@ -47,12 +40,10 @@ WaterLevel::~WaterLevel()
  * @date 2019-10-10
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
-void WaterLevel::setPins(int pins[], size_t length)
-{
+void WaterLevel::setPins(int pins[], size_t length) {
   _length = length;
   _pins = (int *)malloc(sizeof(int) * _length);
-  for (int i = 0; i < _length; i++)
-  {
+  for (int i = 0; i < _length; i++) {
     _pins[i] = pins[i];
     pinMode(_pins[i], INPUT_PULLUP);
   }
@@ -66,8 +57,7 @@ void WaterLevel::setPins(int pins[], size_t length)
  * @date 2019-10-10
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
-void WaterLevel::setEEPROMAddress(int eeprom_address)
-{
+void WaterLevel::setEEPROMAddress(int eeprom_address) {
   _eeprom_address = eeprom_address;
 }
 
@@ -78,12 +68,10 @@ void WaterLevel::setEEPROMAddress(int eeprom_address)
  * @date 2019-10-10
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
-void WaterLevel::loadData(void)
-{
+void WaterLevel::loadData(void) {
   EEPROM.begin(EEPROM_SIZE);
   EEPROM.get(_eeprom_address, _data);
-  if (!_data.is_saved)
-  {
+  if (!_data.is_saved) {
     _data.min_water_level = 9999;
     _data.max_water_level = 0;
   }
@@ -99,8 +87,7 @@ void WaterLevel::loadData(void)
  * @date 2019-10-10
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
-void WaterLevel::saveData(void)
-{
+void WaterLevel::saveData(void) {
   EEPROM.begin(EEPROM_SIZE);
   printf("[WaterLevel] EEPROM 주소: %d\n", _eeprom_address);
   _data.is_saved = true;
@@ -110,14 +97,13 @@ void WaterLevel::saveData(void)
 }
 
 /**
- * @fn void WaterLevel::check(void) 
+ * @fn void WaterLevel::check(void)
  * @brief 수위 체크
  * @return {a} void
  * @date 2019-10-10
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
-void WaterLevel::check(void)
-{
+void WaterLevel::check(void) {
   _last_state = _state;
   _last_water_level = _water_level;
   _water_level = 0;
@@ -126,64 +112,46 @@ void WaterLevel::check(void)
 
   memset(_water_levels, 0, sizeof(_water_levels));
 
-  for (int i = 0; i < count; i++)
-  {
+  for (int i = 0; i < count; i++) {
     _temp_water_level = 0;
-    for (int idx = 0; idx < _length; idx++)
-    {
-      if (digitalRead(_pins[idx]) == HIGH)
-      {
+    for (int idx = 0; idx < _length; idx++) {
+      if (digitalRead(_pins[idx]) == HIGH) {
         _temp_water_level = idx + 1;
       }
       delay(20);
     }
     _water_levels[_temp_water_level]++;
   }
-  for (int i = 0; i < count; i++)
-  {
-    if (_water_levels[i] > _water_levels[_water_level])
-    {
+  for (int i = 0; i < count; i++) {
+    if (_water_levels[i] > _water_levels[_water_level]) {
       _water_level = i;
     }
   }
   // 수위 값 튀어서 급증 방지
   int gap = _last_water_level - _water_level;
-  if (_last_water_level != INITIAL_WATER_LEVEL && abs(gap) > 1)
-  {
-    if (_temp_water_level != _water_level)
-    {
+  if (_last_water_level != INITIAL_WATER_LEVEL && abs(gap) > 1) {
+    if (_temp_water_level != _water_level) {
       _count = 1;
       _temp_water_level = _water_level;
-    }
-    else if (_temp_water_level == _water_level)
-    {
+    } else if (_temp_water_level == _water_level) {
       _count++;
     }
-    if (_count < 10)
-    {
+    if (_count < 10) {
       _water_level = _last_water_level;
     }
-  }
-  else
-  {
+  } else {
     _temp_water_level = INITIAL_WATER_LEVEL;
     _count = 0;
   }
 
-  if (_water_level < _data.min_water_level)
-  {
+  if (_water_level < _data.min_water_level) {
     _state = LACK_WATER_LEVEL;
-  }
-  else if (_data.min_water_level <= _water_level && _water_level < _data.max_water_level)
-  {
+  } else if (_data.min_water_level <= _water_level &&
+             _water_level < _data.max_water_level) {
     _state = GOOD_WATER_LEVEL;
-  }
-  else if (_data.max_water_level <= _water_level)
-  {
+  } else if (_data.max_water_level <= _water_level) {
     _state = FLOOD_WATER_LEVEL;
-  }
-  else
-  {
+  } else {
     _state = ERROR_WATER_LEVEL;
   }
   printf("[WaterLevel] water level : %d state : %d\n", _water_level, _state);
@@ -196,10 +164,7 @@ void WaterLevel::check(void)
  * @date 2019-10-10
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
-unsigned int WaterLevel::getWaterLevel(void)
-{
-  return _water_level;
-}
+unsigned int WaterLevel::getWaterLevel(void) { return _water_level; }
 
 /**
  * @fn WaterLevelState WaterLevel::getWaterLevelState(void)
@@ -208,10 +173,7 @@ unsigned int WaterLevel::getWaterLevel(void)
  * @date 2019-10-10
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
-WaterLevelState WaterLevel::getWaterLevelState(void)
-{
-  return _state;
-}
+WaterLevelState WaterLevel::getWaterLevelState(void) { return _state; }
 
 /**
  * @fn void WaterLevel::setMinWaterLevel(unsigned int min_water_level);
@@ -221,8 +183,7 @@ WaterLevelState WaterLevel::getWaterLevelState(void)
  * @date 2019-10-10
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
-void WaterLevel::setMinWaterLevel(unsigned int min_water_level)
-{
+void WaterLevel::setMinWaterLevel(unsigned int min_water_level) {
   _data.min_water_level = min_water_level;
 }
 
@@ -234,8 +195,7 @@ void WaterLevel::setMinWaterLevel(unsigned int min_water_level)
  * @date 2019-10-10
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
-void WaterLevel::setMaxWaterLevel(unsigned int max_water_level)
-{
+void WaterLevel::setMaxWaterLevel(unsigned int max_water_level) {
   _data.max_water_level = max_water_level;
 }
 /**
@@ -245,8 +205,7 @@ void WaterLevel::setMaxWaterLevel(unsigned int max_water_level)
  * @date 2019-10-10
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
-unsigned int WaterLevel::getMinWaterLevel(void)
-{
+unsigned int WaterLevel::getMinWaterLevel(void) {
   return _data.min_water_level;
 }
 /**
@@ -256,8 +215,7 @@ unsigned int WaterLevel::getMinWaterLevel(void)
  * @date 2019-10-10
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
-unsigned int WaterLevel::getMaxWaterLevel(void)
-{
+unsigned int WaterLevel::getMaxWaterLevel(void) {
   return _data.max_water_level;
 }
 /**
@@ -267,8 +225,7 @@ unsigned int WaterLevel::getMaxWaterLevel(void)
  * @date 2019-10-10
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
-bool WaterLevel::isWateLevelChanged(void)
-{
+bool WaterLevel::isWateLevelChanged(void) {
   return _last_water_level != _water_level;
 }
 
@@ -279,7 +236,4 @@ bool WaterLevel::isWateLevelChanged(void)
  * @date 2019-10-10
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
-bool WaterLevel::isWateLevelStateChanged(void)
-{
-  return _last_state != _state;
-}
+bool WaterLevel::isWateLevelStateChanged(void) { return _last_state != _state; }

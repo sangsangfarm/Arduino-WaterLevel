@@ -14,9 +14,7 @@
  * @date 2019-08-27
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
-WaterLevelWatcher::WaterLevelWatcher(void)
-{
-}
+WaterLevelWatcher::WaterLevelWatcher(void) {}
 
 /**
  * @fn void WaterLevelWatcher::watch(void)
@@ -25,11 +23,12 @@ WaterLevelWatcher::WaterLevelWatcher(void)
  * @date 2019-08-27
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
-void WaterLevelWatcher::watch(void)
-{
-  printf("[WaterLevelWatcher] 전원 상태 : %s\n", _water_level_watcher_data.power ? "켜짐" : "꺼짐");
-  if (!_water_level_watcher_data.power || strncmp(_water_level_watcher_data.url, "", sizeof("")) == 0 || _water_level_watcher_data.outlet == -1)
-  {
+void WaterLevelWatcher::watch(void) {
+  printf("[WaterLevelWatcher] 전원 상태 : %s\n",
+         _water_level_watcher_data.power ? "켜짐" : "꺼짐");
+  if (!_water_level_watcher_data.power ||
+      strncmp(_water_level_watcher_data.url, "", sizeof("")) == 0 ||
+      _water_level_watcher_data.outlet == -1) {
     _water_level_change_flag = false;
     return;
   }
@@ -47,32 +46,24 @@ void WaterLevelWatcher::watch(void)
   http.end();
   DynamicJsonDocument root(JSON_LEN);
   DeserializationError error = deserializeJson(root, result);
-  if (200 <= http_code && http_code < 300)
-  {
-    if (error)
-    {
+  if (200 <= http_code && http_code < 300) {
+    if (error) {
       printf("[WaterLevelWatcher] Parse %s failed.\r\n", result.c_str());
       println(error.c_str());
       state = ERROR_WATER_LEVEL;
     }
-    if (!root["SensorState"].isNull())
-    {
+    if (!root["SensorState"].isNull()) {
       state = (WaterLevelState)(int)root["SensorState"];
     }
-  }
-  else
-  {
+  } else {
     state = ERROR_WATER_LEVEL;
   }
 
   root.clear();
-  if (_state != state)
-  {
+  if (_state != state) {
     _water_level_change_flag = true;
     _state = state;
-  }
-  else
-  {
+  } else {
     _water_level_change_flag = false;
   }
 }
@@ -84,8 +75,7 @@ void WaterLevelWatcher::watch(void)
  * @date 2019-08-27
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
-bool WaterLevelWatcher::getPower(void)
-{
+bool WaterLevelWatcher::getPower(void) {
   return _water_level_watcher_data.power;
 }
 
@@ -97,8 +87,7 @@ bool WaterLevelWatcher::getPower(void)
  * @date 2019-08-27
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
-void WaterLevelWatcher::setPower(bool power)
-{
+void WaterLevelWatcher::setPower(bool power) {
   _water_level_watcher_data.power = power;
 }
 /**
@@ -108,8 +97,7 @@ void WaterLevelWatcher::setPower(bool power)
  * @date 2019-08-27
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
-bool WaterLevelWatcher::isWaterLevelChanged(void)
-{
+bool WaterLevelWatcher::isWaterLevelChanged(void) {
   return _water_level_change_flag;
 }
 
@@ -121,8 +109,7 @@ bool WaterLevelWatcher::isWaterLevelChanged(void)
  * @date 2019-08-27
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
-void WaterLevelWatcher::setEEPROMAddress(int eeprom_address)
-{
+void WaterLevelWatcher::setEEPROMAddress(int eeprom_address) {
   _eeprom_address = eeprom_address;
 }
 
@@ -133,17 +120,17 @@ void WaterLevelWatcher::setEEPROMAddress(int eeprom_address)
  * @date 2019-08-27
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
-void WaterLevelWatcher::loadData(void)
-{
+void WaterLevelWatcher::loadData(void) {
   EEPROM.begin(EEPROM_SIZE);
   EEPROM.get(_eeprom_address, _water_level_watcher_data);
-  if (!_water_level_watcher_data.is_saved)
-  {
-    memset(_water_level_watcher_data.url, 0, sizeof(_water_level_watcher_data.url));
+  if (!_water_level_watcher_data.is_saved) {
+    memset(_water_level_watcher_data.url, 0,
+           sizeof(_water_level_watcher_data.url));
     _water_level_watcher_data.outlet = -1;
   }
   EEPROM.end();
-  printf("[WaterLevelWatcher] url : %s outlet: %d\n", _water_level_watcher_data.url, _water_level_watcher_data.outlet);
+  printf("[WaterLevelWatcher] url : %s outlet: %d\n",
+         _water_level_watcher_data.url, _water_level_watcher_data.outlet);
 }
 
 /**
@@ -153,8 +140,7 @@ void WaterLevelWatcher::loadData(void)
  * @date 2019-08-27
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
-void WaterLevelWatcher::saveData(void)
-{
+void WaterLevelWatcher::saveData(void) {
   EEPROM.begin(EEPROM_SIZE);
   printf("[WaterLevelWatcher] EEPROM 주소: %d\n", _eeprom_address);
   _water_level_watcher_data.is_saved = true;
@@ -170,10 +156,7 @@ void WaterLevelWatcher::saveData(void)
  * @date 2019-08-27
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
-char *WaterLevelWatcher::getUrl(void)
-{
-  return _water_level_watcher_data.url;
-}
+char *WaterLevelWatcher::getUrl(void) { return _water_level_watcher_data.url; }
 
 /**
  * @fn void WaterLevelWatcher::setUrl(char *url)
@@ -183,9 +166,9 @@ char *WaterLevelWatcher::getUrl(void)
  * @date 2019-08-27
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
-void WaterLevelWatcher::setUrl(char *url)
-{
-  memset(_water_level_watcher_data.url, 0, sizeof(_water_level_watcher_data.url));
+void WaterLevelWatcher::setUrl(char *url) {
+  memset(_water_level_watcher_data.url, 0,
+         sizeof(_water_level_watcher_data.url));
   memcpy(_water_level_watcher_data.url, url, strlen(url) + 1);
 }
 
@@ -196,8 +179,7 @@ void WaterLevelWatcher::setUrl(char *url)
  * @date 2019-08-27
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
-char *WaterLevelWatcher::getDeviceName(void)
-{
+char *WaterLevelWatcher::getDeviceName(void) {
   return _water_level_watcher_data.device_name;
 }
 
@@ -209,10 +191,11 @@ char *WaterLevelWatcher::getDeviceName(void)
  * @date 2019-08-27
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
-void WaterLevelWatcher::setDeviceName(char *device_name)
-{
-  memset(_water_level_watcher_data.device_name, 0, sizeof(_water_level_watcher_data.device_name));
-  memcpy(_water_level_watcher_data.device_name, device_name, strlen(device_name) + 1);
+void WaterLevelWatcher::setDeviceName(char *device_name) {
+  memset(_water_level_watcher_data.device_name, 0,
+         sizeof(_water_level_watcher_data.device_name));
+  memcpy(_water_level_watcher_data.device_name, device_name,
+         strlen(device_name) + 1);
 }
 
 /**
@@ -222,8 +205,7 @@ void WaterLevelWatcher::setDeviceName(char *device_name)
  * @date 2019-08-27
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
-int WaterLevelWatcher::getOutlet(void)
-{
+int WaterLevelWatcher::getOutlet(void) {
   return _water_level_watcher_data.outlet;
 }
 
@@ -235,8 +217,7 @@ int WaterLevelWatcher::getOutlet(void)
  * @date 2019-08-27
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
-void WaterLevelWatcher::setOutlet(int outlet)
-{
+void WaterLevelWatcher::setOutlet(int outlet) {
   _water_level_watcher_data.outlet = outlet;
 }
 
@@ -247,8 +228,7 @@ void WaterLevelWatcher::setOutlet(int outlet)
  * @date 2019-08-27
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
-WaterLevelState WaterLevelWatcher::getState(void)
-{
+WaterLevelState WaterLevelWatcher::getState(void) {
   printf("[WaterLevelWatcher] state: %d\n", _state);
   return _state;
 }
