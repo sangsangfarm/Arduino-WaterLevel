@@ -9,7 +9,7 @@ WaterLevel in Arudino.
 
 ## Usage
 
-### Initialize WaterLevel
+### WaterLevel
 
 ```cpp
 void setup() {
@@ -28,5 +28,28 @@ void loop() {
   water_level.check();
   unsigned int current_water_level = water_level.getWaterLevel();
   WaterLevelState current_water_level_state = water_level.getWaterLevelState();
+}
+```
+
+### WaterLevelWatcher
+
+```cpp
+WaterLevelWatcher watcher = WaterLevelWatcher();
+void setup() {
+  char *watching_url = "http://watching.url";
+  int oultet_pin = 10;
+  watcher.setPower(true);
+  watcher.setOutlet(oultet_pin);
+  watcher.setUrl(watching_url);
+
+  //If you load or save water level watcher info, use this.
+  int eeprom_address = 1000;
+  watcher.setEEPORMAddress(eeprom_address);
+  watcher.loadData();
+  watcher.saveData();
+}
+
+void loop() {
+  watcher.watch();
 }
 ```
