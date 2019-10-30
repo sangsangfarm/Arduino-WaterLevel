@@ -1,6 +1,6 @@
 /**
  * @file WaterLevelWatcher.h
- * @brief 수위 체크
+ * @brief Water level watcher
  * @date 2019-08-27
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
@@ -40,25 +40,25 @@
 #endif
 /**
  * @struct WATER_LEVEL_WATCHER_DATA
- * @brief 수위체크 EEPROM 데이터
+ * @brief Water level watcher's EEPROM data
  * @date 2019-08-27
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
 struct WATER_LEVEL_WATCHER_DATA {
-  /** 데이터 저장유뮤 */
+  /** Data storage state */
   bool is_saved;
-  /** 수위 체크 사용 유무 */
+  /** Water level watcher's power state */
   bool power;
-  /** 수위 데이터 URL */
+  /** Water level watcher's URL */
   char url[128];
-  /** 제어할 콘센트 번호 */
+  /** Device name controlled by water level watcher */
   char device_name[20];
-  /** 제어할 콘센트 번호 */
+  /** Outlet number controlled by water level watcher */
   int outlet;
 };
 
 /**
- * @brief 수위 체크
+ * @brief Water level watcher
  * @date 2019-08-27
  * @author Janghun Lee (jhlee@sangsang.farm)
  */

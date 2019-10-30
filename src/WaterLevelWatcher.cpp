@@ -1,6 +1,6 @@
 /**
  * @file WaterLevelWatcher.cpp
- * @brief 수위 체크
+ * @brief Water level watcher
  * @date 2019-08-27
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
@@ -9,8 +9,8 @@
 
 /**
  * @fn WaterLevelWatcher::WaterLevelWatcher(void)
- * @brief 수위 체크 생성자
- * @return 수위 체크 클래스
+ * @brief WaterLevelWatcher constructor
+ * @return WaterLevelWatcher object
  * @date 2019-08-27
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
@@ -18,14 +18,14 @@ WaterLevelWatcher::WaterLevelWatcher(void) {}
 
 /**
  * @fn void WaterLevelWatcher::watch(void)
- * @brief 수위 상태 값 가져오기
+ * @brief Get water level state from url
  * @return void
  * @date 2019-08-27
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
 void WaterLevelWatcher::watch(void) {
-  printf("[WaterLevelWatcher] 전원 상태 : %s\n",
-         _water_level_watcher_data.power ? "켜짐" : "꺼짐");
+  printf("[WaterLevelWatcher] Power state : %s\n",
+         _water_level_watcher_data.power ? "ON" : "OFF");
   if (!_water_level_watcher_data.power ||
       strncmp(_water_level_watcher_data.url, "", sizeof("")) == 0 ||
       _water_level_watcher_data.outlet == -1) {
@@ -42,7 +42,7 @@ void WaterLevelWatcher::watch(void) {
   int http_code = http.GET();
   String result = http.getString();
   println(result);
-  printf("[WaterLevelWatcher] 수위 체크 접속 Http Code : %d\n", http_code);
+  printf("[WaterLevelWatcher] Http Code : %d\n", http_code);
   http.end();
   DynamicJsonDocument root(JSON_LEN);
   DeserializationError error = deserializeJson(root, result);
@@ -70,8 +70,8 @@ void WaterLevelWatcher::watch(void) {
 
 /**
  * @fn bool WaterLevelWatcher::getPower(void)
- * @brief 수위 체크 전원 상태 가져오기
- * @return 수위 체크 전원 상태
+ * @brief Get water level watcher's power state
+ * @return Water level watcher's power state
  * @date 2019-08-27
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
@@ -81,8 +81,8 @@ bool WaterLevelWatcher::getPower(void) {
 
 /**
  * @fn void WaterLevelWatcher::setPower(bool power)
- * @brief 수위 체크 전원 상태 설정
- * @param power 설정할 전원 상태
+ * @brief Set water level watcher's power state
+ * @param power Power state to be set up
  * @return void
  * @date 2019-08-27
  * @author Janghun Lee (jhlee@sangsang.farm)
@@ -92,8 +92,8 @@ void WaterLevelWatcher::setPower(bool power) {
 }
 /**
  * @fn bool WaterLevelWatcher::isWaterLevelChanged(void)
- * @brief 수위 변화 감지
- * @return 수위 변화 감지 여부
+ * @brief Check water level change
+ * @return Change in water level
  * @date 2019-08-27
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
@@ -103,8 +103,8 @@ bool WaterLevelWatcher::isWaterLevelChanged(void) {
 
 /**
  * @fn void WaterLevelWatcher::setEEPROMAddress(int eeprom_address)
- * @brief EEPROM 주소 설정
- * @param eeprom_address 설정할 EEPROM 주소
+ * @brief Set EEPROM address
+ * @param eeprom_address EEPROM address to be set up
  * @return void
  * @date 2019-08-27
  * @author Janghun Lee (jhlee@sangsang.farm)
@@ -115,8 +115,7 @@ void WaterLevelWatcher::setEEPROMAddress(int eeprom_address) {
 
 /**
  * @fn void WaterLevelWatcher::loadData(void)
- * @brief EEPROM 데이터 불러오기
- * @return void
+ * @brief Load EEPROM data
  * @date 2019-08-27
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
@@ -135,7 +134,7 @@ void WaterLevelWatcher::loadData(void) {
 
 /**
  * @fn void WaterLevelWatcher::saveData(void)
- * @brief EEPROM 데이터 저장
+ * @brief Save EEPROM data
  * @return void
  * @date 2019-08-27
  * @author Janghun Lee (jhlee@sangsang.farm)
@@ -151,8 +150,8 @@ void WaterLevelWatcher::saveData(void) {
 
 /**
  * @fn char *WaterLevelWatcher::getUrl(void)
- * @brief 수위 체크 데이터 url 가져오기
- * @return 수위 체크 데이터 url
+ * @brief Get water level watcher's URL
+ * @return URL
  * @date 2019-08-27
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
@@ -160,8 +159,8 @@ char *WaterLevelWatcher::getUrl(void) { return _water_level_watcher_data.url; }
 
 /**
  * @fn void WaterLevelWatcher::setUrl(char *url)
- * @brief 수위 체크 데이터 url 설정
- * @param url 수위 체크 데이터 url
+ * @brief Set water level watcher's URL
+ * @param url URL to be set up
  * @return void
  * @date 2019-08-27
  * @author Janghun Lee (jhlee@sangsang.farm)
@@ -174,8 +173,8 @@ void WaterLevelWatcher::setUrl(char *url) {
 
 /**
  * @fn char *WaterLevelWatcher::getDeviceName(void)
- * @brief 수위 체크가 제어하는 디바이스 이름 가져오기
- * @return 수위 체크가 제어하는 디바이스 이름
+ * @brief Get device name controlled by water level watcher
+ * @return Device name
  * @date 2019-08-27
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
@@ -185,8 +184,8 @@ char *WaterLevelWatcher::getDeviceName(void) {
 
 /**
  * @fn void WaterLevelWatcher::setOutlet(int outlet)
- * @brief 수위 체크가 제어하는 디바이스 이름 설정
- * @param outlet 수위 체크가 제어하는 디바이스 이름
+ * @brief Set device name controlled by water level watcher
+ * @param device_name Device name to be set up
  * @return void
  * @date 2019-08-27
  * @author Janghun Lee (jhlee@sangsang.farm)
@@ -200,8 +199,8 @@ void WaterLevelWatcher::setDeviceName(char *device_name) {
 
 /**
  * @fn int WaterLevelWatcher::getOutlet(void)
- * @brief 수위 체크가 제어하는 콘센트 가져오기
- * @return 수위 체크가 제어하는 콘센트 번호
+ * @brief Get outlet number controlled by water level watcher
+ * @return Outlet number
  * @date 2019-08-27
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
@@ -211,8 +210,8 @@ int WaterLevelWatcher::getOutlet(void) {
 
 /**
  * @fn void WaterLevelWatcher::setOutlet(int outlet)
- * @brief 수위 체크가 제어하는 콘센트 설정
- * @param outlet 수위 체크가 제어하는 콘센트 번호
+ * @brief Set outlet number controlled by water level watcher
+ * @param outlet Outlet number to be set up
  * @return void
  * @date 2019-08-27
  * @author Janghun Lee (jhlee@sangsang.farm)
@@ -223,8 +222,8 @@ void WaterLevelWatcher::setOutlet(int outlet) {
 
 /**
  * @fn WaterLevelState WaterLevelWatcher::getState(void)
- * @brief 수위 체크 상태 가져오기
- * @return 수위 체크 상태
+ * @brief Get water level state
+ * @return Water level state
  * @date 2019-08-27
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
