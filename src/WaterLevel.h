@@ -1,17 +1,23 @@
+/**
+ * @file WaterLevel.h
+ * @brief Water level
+ * @date 2019-10-10
+ * @author Janghun Lee (jhlee@sangsang.farm)
+ */
 
 #ifndef WATER_LEVEL_H
 #define WATER_LEVEL_H
 
 #include <Arduino.h>
-#include <stdlib.h>
 #include <EEPROM.h>
+#include <stdlib.h>
 #include "Common.h"
 
 #ifndef EEPROM_SIZE
 #define EEPROM_SIZE 4096
 #endif
 
-//DEBUG
+// DEBUG
 #ifndef WATER_LEVEL_DEBUG_PORT
 #define WATER_LEVEL_DEBUG_PORT Serial
 #endif
@@ -30,35 +36,32 @@
 #define INITIAL_WATER_LEVEL 99999
 /**
  * @struct WATER_LEVEL_DATA
- * @brief 수위 EEPROM 데이터
+ * @brief Water level EEPROM data
  * @date 2019-10-10
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
-struct WATER_LEVEL_DATA
-{
-  /** 데이터 저장유뮤 */
+struct WATER_LEVEL_DATA {
+  /** Data storage state */
   bool is_saved;
-  /** 최저 수위 */
+  /** Minimum water level */
   unsigned int min_water_level;
-  /** 최고 수위 */
+  /** Maximum water level */
   unsigned int max_water_level;
 };
 
-class WaterLevel
-{
-private:
+class WaterLevel {
+ private:
   int *_pins = NULL;
   size_t _length;
   int _eeprom_address = 0;
   WaterLevelState _state = NONE_WATER_LEVEL, _last_state = NONE_WATER_LEVEL;
   unsigned int _water_level = INITIAL_WATER_LEVEL,
                _last_water_level = INITIAL_WATER_LEVEL,
-               _temp_water_level = INITIAL_WATER_LEVEL,
-               _count = 0;
+               _temp_water_level = INITIAL_WATER_LEVEL, _count = 0;
 
   WATER_LEVEL_DATA _data;
 
-public:
+ public:
   WaterLevel();
   WaterLevel(int pins[], size_t length);
   ~WaterLevel();
