@@ -3,7 +3,7 @@
 #define WATER_LEVEL_COMMON_H
 
 /**
- * @brief 수위 상태
+ * @brief Water level state
  * @date 2019-10-10
  * @author Janghun Lee (jhlee@sangsang.farm)
  */
