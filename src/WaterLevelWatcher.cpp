@@ -102,53 +102,6 @@ bool WaterLevelWatcher::isWaterLevelChanged(void) {
 }
 
 /**
- * @fn void WaterLevelWatcher::setEEPROMAddress(int eeprom_address)
- * @brief Set EEPROM address
- * @param eeprom_address EEPROM address to be set up
- * @return void
- * @date 2019-08-27
- * @author Janghun Lee (jhlee@sangsang.farm)
- */
-void WaterLevelWatcher::setEEPROMAddress(int eeprom_address) {
-  _eeprom_address = eeprom_address;
-}
-
-/**
- * @fn void WaterLevelWatcher::loadData(void)
- * @brief Load EEPROM data
- * @date 2019-08-27
- * @author Janghun Lee (jhlee@sangsang.farm)
- */
-void WaterLevelWatcher::loadData(void) {
-  EEPROM.begin(EEPROM_SIZE);
-  EEPROM.get(_eeprom_address, _water_level_watcher_data);
-  if (!_water_level_watcher_data.is_saved) {
-    memset(_water_level_watcher_data.url, 0,
-           sizeof(_water_level_watcher_data.url));
-    _water_level_watcher_data.outlet = -1;
-  }
-  EEPROM.end();
-  printf("[WaterLevelWatcher] url : %s outlet: %d\n",
-         _water_level_watcher_data.url, _water_level_watcher_data.outlet);
-}
-
-/**
- * @fn void WaterLevelWatcher::saveData(void)
- * @brief Save EEPROM data
- * @return void
- * @date 2019-08-27
- * @author Janghun Lee (jhlee@sangsang.farm)
- */
-void WaterLevelWatcher::saveData(void) {
-  EEPROM.begin(EEPROM_SIZE);
-  printf("[WaterLevelWatcher] EEPROM 주소: %d\n", _eeprom_address);
-  _water_level_watcher_data.is_saved = true;
-  EEPROM.put(_eeprom_address, _water_level_watcher_data);
-  EEPROM.commit();
-  EEPROM.end();
-}
-
-/**
  * @fn char *WaterLevelWatcher::getUrl(void)
  * @brief Get water level watcher's URL
  * @return URL

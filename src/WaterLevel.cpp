@@ -56,53 +56,6 @@ void WaterLevel::setPins(int pins[], size_t length) {
 }
 
 /**
- * @fn void WaterLevel::setEEPROMAddress(int eeprom_address)
- * @brief Set EEPROM address
- * @param eeprom_address EEPROM address to be set up
- * @return void
- * @date 2019-10-10
- * @author Janghun Lee (jhlee@sangsang.farm)
- */
-void WaterLevel::setEEPROMAddress(int eeprom_address) {
-  _eeprom_address = eeprom_address;
-}
-
-/**
- * @fn void WaterLevel::loadData(void)
- * @brief Load EEPROM data
- * @return void
- * @date 2019-10-10
- * @author Janghun Lee (jhlee@sangsang.farm)
- */
-void WaterLevel::loadData(void) {
-  EEPROM.begin(EEPROM_SIZE);
-  EEPROM.get(_eeprom_address, _data);
-  if (!_data.is_saved) {
-    _data.min_water_level = 9999;
-    _data.max_water_level = 0;
-  }
-  EEPROM.end();
-  printf("[WaterLevel] min water level : %d max water level: %d\n",
-         _data.min_water_level, _data.max_water_level);
-}
-
-/**
- * @fn void WaterLevel::saveData(void)
- * @brief Save EEPROM data
- * @return void
- * @date 2019-10-10
- * @author Janghun Lee (jhlee@sangsang.farm)
- */
-void WaterLevel::saveData(void) {
-  EEPROM.begin(EEPROM_SIZE);
-  printf("[WaterLevel] EEPROM address: %d\n", _eeprom_address);
-  _data.is_saved = true;
-  EEPROM.put(_eeprom_address, _data);
-  EEPROM.commit();
-  EEPROM.end();
-}
-
-/**
  * @fn void WaterLevel::check(void)
  * @brief Check water level
  * @return void

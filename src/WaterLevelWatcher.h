@@ -73,9 +73,6 @@ class WaterLevelWatcher {
   WaterLevelWatcher(void);
   void watch(void);
   bool isWaterLevelChanged(void);
-  void setEEPROMAddress(int eeprom_address);
-  void loadData(void);
-  void saveData(void);
 
   bool getPower(void);
   void setPower(bool power);

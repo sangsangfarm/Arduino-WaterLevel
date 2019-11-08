@@ -66,9 +66,6 @@ class WaterLevel {
   WaterLevel(int pins[], size_t length);
   ~WaterLevel();
   void setPins(int pins[], size_t length);
-  void setEEPROMAddress(int eeprom_address);
-  void loadData(void);
-  void saveData(void);
 
   void check(void);
 

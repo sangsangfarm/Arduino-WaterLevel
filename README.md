@@ -42,11 +42,6 @@ void setup() {
   watcher.setOutlet(oultet_pin);
   watcher.setUrl(watching_url);
 
-  //If you load or save water level watcher info, use this.
-  int eeprom_address = 1000;
-  watcher.setEEPORMAddress(eeprom_address);
-  watcher.loadData();
-  watcher.saveData();
 }
 
 void loop() {
