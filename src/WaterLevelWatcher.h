@@ -10,6 +10,7 @@
 
 #include <ArduinoJson.h>
 #include <EEPROM.h>
+#include <time.h>
 #include "Common.h"
 #ifdef ESP8266
 #include <ESP8266HTTPClient.h>
@@ -55,6 +56,12 @@ struct WATER_LEVEL_WATCHER_DATA {
   char device_name[20];
   /** Outlet number controlled by water level watcher */
   int outlet;
+  /** The last time of watering by water level watcher */
+  time_t last_watering_time;
+  /** The time of water flowing by water level watcher */
+  long water_flow_time;
+  /** The interval time of watering by water level watcher */
+  long watering_interval_time;
 };
 
 /**
@@ -67,7 +74,6 @@ class WaterLevelWatcher {
   WATER_LEVEL_WATCHER_DATA _water_level_watcher_data;
   WaterLevelState _state;
   bool _water_level_change_flag = false;
-  int _eeprom_address = 0;
 
  public:
   WaterLevelWatcher(void);
@@ -85,6 +91,18 @@ class WaterLevelWatcher {
 
   int getOutlet(void);
   void setOutlet(int outlet);
+
+  time_t getLastWateringTime(void);
+  void setLastWateringTime(time_t last_watering_time);
+
+  long getWaterFlowTime(void);
+  void setWaterFlowTime(long water_flow_time);
+
+  long getWateringIntervalTime(void);
+  void setWateringIntervalTime(long watering_interval_time);
+
+  bool isTimeOver(void);
+  bool isTimeToWatering(void);
 
   WaterLevelState getState(void);
 };

@@ -184,3 +184,99 @@ WaterLevelState WaterLevelWatcher::getState(void) {
   printf("[WaterLevelWatcher] state: %d\n", _state);
   return _state;
 }
+
+/**
+ * @fn void WaterLevelWatcher::setLastWateringTime(time_t last_watering_time)
+ * @brief Set the last watering time by water level watcher
+ * @param last_watering_time The last time of watering to be set up
+ * @return void
+ * @date 2019-11-14
+ * @author Janghun Lee (jhlee@sangsang.farm)
+ */
+void WaterLevelWatcher::setLastWateringTime(time_t last_watering_time) {
+  _water_level_watcher_data.last_watering_time = last_watering_time;
+}
+
+/**
+ * @fn time_t WaterLevelWatcher::getLastWateringTime(void)
+ * @brief Get the last watering time by water level watcher
+ * @return The last time of watering
+ * @date 2019-11-14
+ * @author Janghun Lee (jhlee@sangsang.farm)
+ */
+time_t WaterLevelWatcher::getLastWateringTime(void) {
+  return _water_level_watcher_data.last_watering_time;
+}
+
+/**
+ * @fn void WaterLevelWatcher::setWaterFlowTime(long water_flow_time)
+ * @brief Set the water flow time by water level watcher
+ * @param water_flow_time The water flow time to be set up
+ * @return void
+ * @date 2019-11-14
+ * @author Janghun Lee (jhlee@sangsang.farm)
+ */
+void WaterLevelWatcher::setWaterFlowTime(long water_flow_time) {
+  _water_level_watcher_data.water_flow_time = water_flow_time;
+}
+
+/**
+ * @fn long WaterLevelWatcher::getWaterFlowTime(void)
+ * @brief Get the water flow time by water level watcher
+ * @return The water flow time
+ * @date 2019-11-14
+ * @author Janghun Lee (jhlee@sangsang.farm)
+ */
+long WaterLevelWatcher::getWaterFlowTime(void) {
+  return _water_level_watcher_data.water_flow_time;
+}
+
+/**
+ * @fn void WaterLevelWatcher::setWateringIntervalTime(long
+ * watering_interval_time)
+ * @brief Set the interval time of watering by water level watcher
+ * @param watering_interval_time The interval time of watering to be set up
+ * @return void
+ * @date 2019-11-14
+ * @author Janghun Lee (jhlee@sangsang.farm)
+ */
+void WaterLevelWatcher::setWateringIntervalTime(long watering_interval_time) {
+  _water_level_watcher_data.watering_interval_time = watering_interval_time;
+}
+
+/**
+ * @fn long WaterLevelWatcher::getWateringIntervalTime(void)
+ * @brief Get the interval time of watering by water level watcher
+ * @return The interval time of watering
+ * @date 2019-11-14
+ * @author Janghun Lee (jhlee@sangsang.farm)
+ */
+long WaterLevelWatcher::getWateringIntervalTime(void) {
+  return _water_level_watcher_data.watering_interval_time;
+}
+
+/**
+ * @fn bool WaterLevelWatcher::isTimeOver(void)
+ * @brief Check watering timeout
+ * @return timeout or not
+ * @date 2019-11-15
+ * @author Janghun Lee (jhlee@sangsang.farm)
+ */
+bool WaterLevelWatcher::isTimeOver(void) {
+  time_t now = time(nullptr);
+  return now - _water_level_watcher_data.last_watering_time >
+         _water_level_watcher_data.water_flow_time;
+}
+
+/**
+ * @fn bool WaterLevelWatcher::isTimeToWatering(void)
+ * @brief Check the time to water.
+ * @return the time to water or not
+ * @date 2019-11-15
+ * @author Janghun Lee (jhlee@sangsang.farm)
+ */
+bool WaterLevelWatcher::isTimeToWatering(void) {
+  time_t now = time(nullptr);
+  return now - _water_level_watcher_data.last_watering_time >
+         _water_level_watcher_data.watering_interval_time;
+}
